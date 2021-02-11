@@ -2,8 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
 import { Provider } from 'react-redux';
+import './assets/reset.css';
+import './assets/style.css';
 import createStore from './reducks/store/store'
 import { ConnectedRouter } from 'connected-react-router';
 import * as History from 'history';

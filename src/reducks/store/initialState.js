@@ -1,4 +1,7 @@
 const initialState = {
+  boards: {
+    list: []
+  },
   users: {
     icon: "",
     isSignedIn: false,

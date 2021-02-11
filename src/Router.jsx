@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router';
-import { BoardEdit, Home, Reset, SignUp, SignIn } from './template';
+import { BoardCreate, Reset, SignUp, SignIn, BoardList } from './template';
 import Auth from './Auth';
 
 const Router = () => {
@@ -11,8 +11,8 @@ const Router = () => {
       <Route exact path={"/signup"} component={SignUp} />
 
       <Auth>
-        <Route exact path={"/board/edit"} component={BoardEdit} />
-        <Route exact path={"(/)?"} component={Home} />
+        <Route exact path={"/board/edit"} component={BoardCreate} />
+        <Route exact path={"(/)?"} component={BoardList} />
       </Auth>
     </Switch>
   )

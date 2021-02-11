@@ -1,4 +1,5 @@
-export { default as BoardEdit } from './BoardEdit';
+export { default as BoardCreate } from './BoardCreate';
+export { default as BoardList } from './BoardList';
 export { default as Home } from './Home';
 export { default as Reset } from './Reset';
 export { default as SignIn } from './SignIn';
