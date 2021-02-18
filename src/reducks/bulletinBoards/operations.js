@@ -4,21 +4,6 @@ import { fetchBoardsAction } from './actions';
 
 const boardsRef = db.collection('bulletinBoards');
 
-export const fetchBoards = () => {
-  return async (dispatch) => {
-    boardsRef.orderBy('updated_at', 'desc').get()
-      .then(snapshots => {
-        const boardList = [];
-        snapshots.forEach(snapshot => {
-          const board = snapshot.data();
-          boardList.push(board)
-        })
-
-        dispatch(fetchBoardsAction(boardList))
-      })
-  }
-}
-
 export const createBoard = (title, category, memo, image) => {
   return async (dispatch) => {
     const timestamp = FirebaseTimestamp.now();
@@ -29,6 +14,11 @@ export const createBoard = (title, category, memo, image) => {
       memo: memo,
       title: title,
       updated_at: timestamp
+    }
+
+    if (data.title.length > 20) {
+      alert('タイトル文字数が20字を超えています。')
+      return false
     }
 
     const ref = boardsRef.doc();
@@ -42,5 +32,43 @@ export const createBoard = (title, category, memo, image) => {
       }).catch((error) => {
         throw new Error(error)
       })
+  }
+}
+
+export const fetchBoards = (category = "") => {
+  return async (dispatch) => {
+    let query = boardsRef.orderBy('updated_at', 'desc');
+    query = (category !== "") ? query.where('category', '==', category) : query;
+
+    query.get()
+      .then(snapshots => {
+        const boardList = [];
+        snapshots.forEach(snapshot => {
+          const board = snapshot.data();
+          boardList.push(board)
+        })
+
+        dispatch(fetchBoardsAction(boardList))
+      })
+  }
+}
+
+export const searchKeyword = (keyword) => {
+  return async (dispatch) => {
+    let query = boardsRef.orderBy('updated_at', 'desc');
+
+    query.get()
+      .then(snapshots => {
+        const boardList = [];
+        snapshots.forEach(snapshot => {
+          const board = snapshot.data();
+          if (board.title.indexOf(keyword) >= 0) {
+            boardList.push(board)
+          }
+        })
+
+        dispatch(fetchBoardsAction(boardList))
+      })
+    
   }
 }

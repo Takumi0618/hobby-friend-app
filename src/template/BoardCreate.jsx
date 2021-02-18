@@ -1,8 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { PrimaryButton, SelectBox, TextInput } from '../components/UIkit';
 import { createBoard } from '../reducks/bulletinBoards/operations';
 import { useDispatch } from "react-redux";
 import { ImageArea } from '../components/boards';
+import { db } from '../firebase';
 
 
 
@@ -11,6 +12,7 @@ const BoardCreate = () => {
 
   const [title, setTitle] = useState(""),
         [category, setCategory] = useState(""),
+        [categories, setCategories] = useState([]),
         [memo, setMemo] = useState(""),
         [image, setImage] = useState({id: "", path: ""});
 
@@ -22,17 +24,23 @@ const BoardCreate = () => {
     setMemo(event.target.value)
   }, [setMemo]);
 
-  const categories = [
-    {id: "sports", name: "スポーツ"},
-    {id: "music", name: "音楽"},
-    {id: "game", name: "ゲーム"},
-    {id: "cartoon", name: "アニメ"},
-    {id: "books", name: "読書"},
-    {id: "entertainment", name: "エンタメ"},
-    {id: "business", name: "ビジネス"},
-    {id: "food", name: "グルメ"},
-    {id: "sweets", name: "スイーツ"},
-  ];
+
+  useEffect(() => {
+    db.collection('categories')
+      .orderBy('order', 'asc')
+      .get()
+      .then((snapshots) => {
+        const list = [];
+        snapshots.forEach(snapshot => {
+          const data = snapshot.data();
+          list.push({
+            id: data.id,
+            name: data.name
+          })
+        })
+        setCategories(list)
+      })
+  }, []);
 
   return (
     <section>
@@ -40,7 +48,7 @@ const BoardCreate = () => {
       <div className="c-section-container">
         <ImageArea image={image} setImage={setImage} />
         <TextInput 
-          fullWidth={true} label={"タイトル"} multiline={false} required={true}
+          fullWidth={true} label={"タイトル (20文字以内)"} multiline={false} required={true}
           rows={1} value={title} type={"text"} onChange={inputTitle}
         />
         <SelectBox 

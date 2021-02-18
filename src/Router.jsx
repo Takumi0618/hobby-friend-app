@@ -11,7 +11,7 @@ const Router = () => {
       <Route exact path={"/signup"} component={SignUp} />
 
       <Auth>
-        <Route exact path={"/board/edit"} component={BoardCreate} />
+        <Route exact path={"/board/create"} component={BoardCreate} />
         <Route exact path={"(/)?"} component={BoardList} />
       </Auth>
     </Switch>
