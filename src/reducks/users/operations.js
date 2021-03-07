@@ -20,7 +20,7 @@ export const listenAuthState = () => {
 
               dispatch(signInAction({
                 isSignedIn: true,
-                role: data.role,
+                icon: data.icon,
                 uid: uid,
                 username: data.username
               }))
@@ -49,6 +49,30 @@ export const resetPassword = (email) => {
   }
 }
 
+export const setProfile = (uid, username, hobby1, hobby2, hobby3 , introduce, image) => {
+  return async (dispatch) => {
+    if (username.trim() === "") {
+      alert('名前が未入力です')
+      return false
+    } else {
+      const timestamp = FirebaseTimestamp.now();
+
+      const data = {
+        username: username,
+        hobbies: [hobby1, hobby2, hobby3],
+        introduce: introduce,
+        icon: image,
+        updated_at: timestamp,
+      }
+
+      usersRef.doc(uid).set(data, {merge: true})
+      .then(() => {
+        dispatch(push('/'))
+      })
+    }
+  }
+}
+
 export const signIn = (email, password) => {
   return async (dispatch) => {
     // Validation
@@ -61,24 +85,29 @@ export const signIn = (email, password) => {
     .then(result => {
       const user = result.user;
 
-      if (user) {
+      if (!user) {
+        throw new Error('ユーザーIDを取得できません')
+      }
         const uid = user.uid;
 
-        db.collection('users').doc(uid).get()
+        usersRef.doc(uid).get()
           .then(snapshot => {
             const data = snapshot.data();
+            if(!data){
+              throw new Error('ユーザーデータが存在しません')
+            }
+
 
             dispatch(signInAction({
               icon: data.icon,
               isSignedIn: true,
-              role: data.role,
               uid: uid,
               username: data.username
             }))
 
             dispatch(push('/'))
           })
-      }
+      
     })
   }
 }
@@ -110,7 +139,7 @@ export const signUp = (username, email, password, confirmPassword) => {
           const userInitialData = {
             created_at: timestamp,
             email: email,
-            role: "customer",
+            icon: {id: "", path: ""},
             uid: uid,
             updated_at: timestamp,
             username: username
@@ -150,18 +179,24 @@ export const TwitterSignIn = () => {
           const icon = user.photoURL;
 
           const userInitialData = {
-            icon: icon,
+            icon: {id: "", path: icon},
             created_at: timestamp,
             email: email,
-            role: "customer",
             uid: uid,
             updated_at: timestamp,
-            username: username
+            username: username,
           }
           
           if (!db.collection('users').doc(uid).get()){
             db.collection('users').doc(uid).set(userInitialData)
           }
+
+          dispatch(signInAction({
+            icon: icon,
+            isSignedIn: true,
+            uid: uid,
+            username: username
+          }))
           dispatch(push('/'))
         }
       })

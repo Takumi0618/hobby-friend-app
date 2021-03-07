@@ -1,14 +1,18 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import { useDispatch } from 'react-redux';
+import { push } from 'connected-react-router';
+import { db } from '../../firebase';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: "#fff5c5",
+    cursor: "pointer",
     [theme.breakpoints.down('sm')]: {
       width: 'calc(100% - 16px)',
       margin: 8,
@@ -46,6 +50,9 @@ const useStyles = makeStyles((theme) => ({
 
 const BoardCard = (props) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const [categories, setCategories] = useState([]);
 
   const timestampToTime = useCallback((timestamp) => {
     const date = new Date(timestamp.seconds * 1000);
@@ -60,20 +67,9 @@ const BoardCard = (props) => {
     const ss = `0${date.getSeconds()}`.slice(-2);
 
     return `${yyyy}/${MM}/${dd} ${HH}:${mm}:${ss}`;
-  }, [props])
+  }, [])
   
   const categoryIdToName = (categoryId) => {
-    const categories = [
-      {id: "sports", name: "スポーツ"},
-      {id: "music", name: "音楽"},
-      {id: "game", name: "ゲーム"},
-      {id: "cartoon", name: "アニメ"},
-      {id: "books", name: "読書"},
-      {id: "entertainment", name: "エンタメ"},
-      {id: "business", name: "ビジネス"},
-      {id: "food", name: "グルメ"},
-      {id: "sweets", name: "スイーツ"},
-    ];
     for(let i = 0; i < categories.length; i++) {
       if (categoryId === categories[i].id) {
         return categories[i].name
@@ -81,9 +77,25 @@ const BoardCard = (props) => {
     }
   }
 
+  useEffect(() => {
+    db.collection('categories')
+      .orderBy('order', 'asc')
+      .get()
+      .then((snapshots) => {
+        const list = [];
+        snapshots.forEach(snapshot => {
+          const data = snapshot.data();
+          list.push({
+            id: data.id,
+            name: data.name
+          })
+        })
+        setCategories(list)
+      })
+  }, []);
 
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} onClick={() => dispatch(push(`/board/detail/${props.id}`))}>
       <div className={classes.category}>{categoryIdToName(props.category)}</div>
       <CardHeader
         className={classes.header}

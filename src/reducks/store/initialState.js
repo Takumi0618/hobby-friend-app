@@ -1,11 +1,11 @@
 const initialState = {
   boards: {
-    list: []
+    list: [],
+    messages: [],
   },
   users: {
-    icon: "",
+    icon: {id: "", path: ""},
     isSignedIn: false,
-    role: "",
     uid: "",
     username: ""
   }

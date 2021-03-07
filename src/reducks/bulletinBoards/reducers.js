@@ -8,6 +8,11 @@ export const BoardsReducer = (state = initialState.boards, action) => {
         ...state,
         list: [...action.payload]
       };
+    case Actions.FETCH_BOARD_MESSAGES:
+      return {
+        ...state,
+        messages: [...action.payload]
+      };
     default:
       return state
   }

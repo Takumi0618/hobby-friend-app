@@ -43,6 +43,11 @@ const ClosableDrawer = (props) => {
     props.onClose(event);
   };
 
+  const doSignOut = (event) => {
+    dispatch(signOut())
+    props.onClose(event);
+  }
+
   const menus = [
     {func: selectMenu, label: "掲示板", icon: <GroupIcon />, id: "bulletin board", value: "/"},
     {func: selectMenu, label: "チャット", icon: <ChatIcon />, id: "chat", value: "/chat"},
@@ -58,7 +63,7 @@ const ClosableDrawer = (props) => {
         open={props.open}
         onClose={(e) => props.onClose(e)}
         classes={{paper: classes.drawerPaper}}
-        ModalProps={{keepMounter: true}}
+        ModalProps={{keepMounted: true}}
       >
         <List>
           {menus.map(menu => (
@@ -69,7 +74,7 @@ const ClosableDrawer = (props) => {
               <ListItemText primary={menu.label} />
             </ListItem>
           ))}
-          <ListItem button key="logout" onClick={() => dispatch(signOut())}>
+          <ListItem button key="logout" onClick={(e) => doSignOut(e)}>
             <ListItemIcon>
               <ExitToAppIcon />
             </ListItemIcon>

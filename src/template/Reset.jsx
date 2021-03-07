@@ -15,14 +15,14 @@ const Reset = () => {
   
         
   return (
-    <div>
+    <div className="c-section-container">
       <h2>パスワードのリセット</h2>
-      <div>スペース</div>
+      <div className="module-spacer--small"/>
+
       <TextInput 
         fullWidth={true} label={"メールアドレス"} multiline={false} required={true}
         rows={1} value={email} type={"text"} onChange={inputEmail}
       />
-      <div>スペース</div>
       <div>
         <PrimaryButton
           label={"Reset password"}

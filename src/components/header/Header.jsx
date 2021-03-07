@@ -6,10 +6,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getIsSignedIn } from '../../reducks/users/selector';
 import { push } from 'connected-react-router';
 import { ClosableDrawer, HeaderMenu } from './index';
+import Logo from '../../assets/img/logo.png'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+  },
+  logo: {
+    height: 55,
+    cursor: "pointer",
   },
   menuBar: {
     backgroundColor: "#fff",
@@ -51,7 +56,9 @@ const Header = () => {
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.menuBar}>
         <Toolbar className={classes.toolBar}>
-          <img 
+          <img
+            className={classes.logo}
+            src={Logo}
             alt="hobby-friend Logo" 
             onClick={() => dispatch(push('/'))}          
           />

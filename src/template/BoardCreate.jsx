@@ -5,8 +5,6 @@ import { useDispatch } from "react-redux";
 import { ImageArea } from '../components/boards';
 import { db } from '../firebase';
 
-
-
 const BoardCreate = () => {
   const dispatch = useDispatch()
 
@@ -46,6 +44,7 @@ const BoardCreate = () => {
     <section>
       <h2 className="u-text__headline u-text-center">掲示板の作成</h2>
       <div className="c-section-container">
+        
         <ImageArea image={image} setImage={setImage} />
         <TextInput 
           fullWidth={true} label={"タイトル (20文字以内)"} multiline={false} required={true}

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import IconButton from '@material-ui/core/IconButton'; 
-import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate'; 
+import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'; 
 import { makeStyles } from '@material-ui/styles';
 import { storage } from '../../firebase/index';
 import ImagePreview from './ImagePreview';
@@ -50,14 +50,14 @@ const ImageArea = ({ image, setImage }) => {
 
   return (
     <div>
-      {image.id !== "" ?
-        (<ImagePreview delete={deleteImage} id={image.id} path={image.path} />)
+      {image.path !== "" ?
+        <ImagePreview delete={deleteImage} id={image.id} path={image.path} />
       :
         <div className="u-text-right">
           <span>画像を登録</span>
           <IconButton className={classes.icon}>
             <label>
-              <AddPhotoAlternateIcon />
+              <AddAPhotoIcon />
               <input className="u-display-none" type="file" id="image" onChange={(event) => uploadImage(event)} />
             </label>
           </IconButton>

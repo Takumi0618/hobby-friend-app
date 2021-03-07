@@ -1,6 +1,6 @@
 import { push } from 'connected-react-router';
 import { db, FirebaseTimestamp } from '../../firebase';
-import { fetchBoardsAction } from './actions';
+import { fetchBoardsAction, fetchMessagesAction } from './actions';
 
 const boardsRef = db.collection('bulletinBoards');
 
@@ -40,7 +40,7 @@ export const fetchBoards = (category = "") => {
     let query = boardsRef.orderBy('updated_at', 'desc');
     query = (category !== "") ? query.where('category', '==', category) : query;
 
-    query.get()
+    await query.get()
       .then(snapshots => {
         const boardList = [];
         snapshots.forEach(snapshot => {
@@ -49,6 +49,25 @@ export const fetchBoards = (category = "") => {
         })
 
         dispatch(fetchBoardsAction(boardList))
+      })
+  }
+}
+
+export const fetchMessages = (id) => {
+  return async (dispatch) => {
+    const list = [];
+
+    boardsRef.doc(id)
+      .collection('messages')
+      .orderBy('sended_at', 'asc')
+      .get()
+      .then(snapshots => {
+        snapshots.forEach(snapshot =>{
+          const data = snapshot.data()
+          list.push(data)
+        })
+
+        dispatch(fetchMessagesAction(list))
       })
   }
 }
@@ -70,5 +89,26 @@ export const searchKeyword = (keyword) => {
         dispatch(fetchBoardsAction(boardList))
       })
     
+  }
+}
+
+export const sendMessage = (text, boardId, uid, icon) => {
+  return async () => {
+    const timestamp = FirebaseTimestamp.now();
+
+    const message = {
+      uid: uid,
+      sended_at: timestamp,
+      message: text,
+      icon: icon,
+      image: {id: '', path: ''}
+    }
+
+    boardsRef.doc(boardId).set({updated_at: timestamp}, {merge: true})
+      .then(() => {
+        boardsRef.doc(boardId).collection('messages').doc().set(message)
+      }).catch((error) => {
+        throw new Error(error)
+      })
   }
 }

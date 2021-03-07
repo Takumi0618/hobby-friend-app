@@ -29,9 +29,8 @@ const SignUp = () => {
   }, [setConfirmPassword]);
         
   return (
-    <div>
+    <div className="c-section-container">
       <h2>アカウント登録</h2>
-      <div>スペース</div>
       <TextInput 
         fullWidth={true} label={"ユーザー名"} multiline={false} required={true}
         rows={1} value={username} type={"text"} onChange={inputUsername}
@@ -48,7 +47,7 @@ const SignUp = () => {
         fullWidth={true} label={"パスワードの確認"} multiline={false} required={true}
         rows={1} value={confirmPassword} type={"password"} onChange={inputConfirmPassword}
       />
-      <div>スペース</div>
+      <div className="module-spacer--small"/>
       <div>
         <PrimaryButton
           label={"アカウントを登録する"}

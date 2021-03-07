@@ -6,3 +6,11 @@ export const fetchBoardsAction = (boards) => {
   }
 }
 
+export const FETCH_BOARD_MESSAGES = "FETCH_BOARD_MESSAGES";
+export const fetchMessagesAction = (messages) => {
+  return {
+    type: "FETCH_BOARD_MESSAGES",
+    payload: messages
+  }
+}
+

@@ -1,7 +1,7 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /users/{userID} {
+    match /users/{userId} {
       allow read: if request.auth.uid != null;
       allow create;
       allow update: if request.auth.uid == userId;
@@ -11,6 +11,11 @@ service cloud.firestore {
     match /bulletinBoards/{boardId} {
       allow read: if request.auth.uid != null;
       allow write: if request.auth.uid != null;
+
+      match /messages/{messageId} {
+        allow read: if request.auth.uid != null;
+        allow write: if request.auth.uid != null;
+      }
     }
     
     match /categories/{categoryId} {

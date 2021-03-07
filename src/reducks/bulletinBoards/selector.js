@@ -7,3 +7,7 @@ export const getBoards = createSelector(
   state => state.list 
 )
 
+export const getMessages = createSelector(
+  [boardsSelector],
+  state => state.messages
+)

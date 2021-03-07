@@ -19,9 +19,8 @@ const SignIn = () => {
   }, [setPassword]);
         
   return (
-    <div>
+    <div className="c-section-container">
       <h2>サインイン</h2>
-      <div>スペース</div>
       <TextInput 
         fullWidth={true} label={"メールアドレス"} multiline={false} required={true}
         rows={1} value={email} type={"text"} onChange={inputEmail}
@@ -30,14 +29,14 @@ const SignIn = () => {
         fullWidth={true} label={"パスワード(6文字以上の英数字)"} multiline={false} required={true}
         rows={1} value={password} type={"password"} onChange={inputPassword}
       />
-      <div>スペース</div>
+      <div className="module-spacer--small"/>
       <div>
         <PrimaryButton
           label={"Sign In"}
           onClick={() => dispatch(signIn(email, password))}
         />
         <PrimaryButton
-          label={"Twitterで登録・サインインする"}
+          label={"Twitterで登録・サインイン"}
           onClick={() => dispatch(TwitterSignIn())}
         />
         <p onClick={() => dispatch(push('/signup'))}>アカウント登録はこちら</p>

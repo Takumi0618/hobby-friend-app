@@ -16,14 +16,13 @@ const BoardList = () => {
     dispatch(fetchBoards(category))
   }, [query])
 
-  
   return (
     <section className="c-section-wrapin">
       <BoardNav />
       <div className="p-grid__row">
         {boards.length > 0 && (
           boards.map(board => (
-            <BoardCard key={board.id} title={board.title} image={board.image} updated_at={board.updated_at} memo={board.memo} category={board.category}/>
+            <BoardCard key={board.id} title={board.title} image={board.image} updated_at={board.updated_at} memo={board.memo} category={board.category} id={board.id} />
           ))
         )}
       </div>
