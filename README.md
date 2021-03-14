@@ -1,70 +1,26 @@
-# Getting Started with Create React App
+# 趣味フレアプリ
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+社会人になってから友達作りが難しいと感じていたので、同じ趣味を共有できる友達作りのアプリを開発しました。
 
-## Available Scripts
+## DEMO
 
-In the project directory, you can run:
+ログインしたら掲示板リストの画面に遷移します。そこで自分が話したいカテゴリーの掲示板を作成できます。
+他のユーザーと掲示板で自分の趣味についてお話できます。
 
-### `yarn start`
+![](https://hobby-friend-app.web.app/signin)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+アカウント     アドレス                 パスワード
+たこすけ       takosuke@tako.jp         takosuke
+たろう         tarotaro@taro.jp         tarotaro
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+![image](https://user-images.githubusercontent.com/72084948/111071615-55334780-851a-11eb-9957-9c4fe394b1df.png)
+![image](https://user-images.githubusercontent.com/72084948/111071664-8e6bb780-851a-11eb-8ac6-b32a88fcf7db.png)
 
-### `yarn test`
+### Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  自分の好きなカテゴリーの掲示板を作成・検索することができて、掲示板で同じ趣味のお友達とチャットすることができます。
+  他のSNSとの差別化は掲示板で話し合うところで、掲示板という一つのグループを作ることで仲間意識が芽生えると考えました。
 
-### `yarn build`
+### Technology
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+  React, Redux, Firebaseを使用しており、SPAを意識して開発しました。
