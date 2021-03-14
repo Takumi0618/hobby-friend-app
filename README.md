@@ -7,11 +7,11 @@
 ログインしたら掲示板リストの画面に遷移します。そこで自分が話したいカテゴリーの掲示板を作成できます。
 他のユーザーと掲示板で自分の趣味についてお話できます。
 
-![](https://hobby-friend-app.web.app/signin)
+<https://hobby-friend-app.web.app/signin>
 
-アカウント     アドレス                 パスワード
-たこすけ       takosuke@tako.jp         takosuke
-たろう         tarotaro@taro.jp         tarotaro
+アカウント     アドレス                 パスワード  
+たこすけ       takosuke@tako.jp         takosuke  
+たろう         tarotaro@taro.jp         tarotaro  
 
 ![image](https://user-images.githubusercontent.com/72084948/111071615-55334780-851a-11eb-9957-9c4fe394b1df.png)
 ![image](https://user-images.githubusercontent.com/72084948/111071664-8e6bb780-851a-11eb-8ac6-b32a88fcf7db.png)
