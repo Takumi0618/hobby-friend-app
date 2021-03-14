@@ -46,7 +46,7 @@ const ImageArea = ({ image, setImage }) => {
       })
     })
     
-  }, [setImage]) 
+  }, [setImage])
 
   return (
     <div>

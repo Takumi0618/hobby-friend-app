@@ -1,6 +1,8 @@
 export { default as BoardCreate } from './BoardCreate';
 export { default as BoardDetail } from './BoardDetail';
 export { default as BoardList } from './BoardList';
+export { default as ChatFriend } from './ChatFriend';
+export { default as Friends } from './Friends';
 export { default as FriendProfile } from './FriendProfile';
 export { default as Profile } from './Profile';
 export { default as Reset } from './Reset';

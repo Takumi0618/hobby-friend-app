@@ -1,9 +1,55 @@
-import { signInAction, signOutAction } from './actions';
+import { fetchFriendsAction, signInAction, signOutAction } from './actions';
 import { push } from "connected-react-router";
 import { auth, db, FirebaseTimestamp } from '../../firebase/index';
 import firebase from 'firebase/app';
 
 const usersRef = db.collection('users');
+
+export const fetchFriends = (uid) => {
+  return async (dispatch) => {
+    const list = [];
+
+    usersRef.doc(uid)
+      .collection('friends')
+      .orderBy('updated_at', 'asc')
+      .get()
+      .then(snapshots => {
+        snapshots.forEach(snapshot =>{
+          const data = snapshot.data()
+          list.push(data)
+        })
+
+        dispatch(fetchFriendsAction(list))
+      })
+  }
+}
+
+export const friendAdd = (friends, friendId, username, image, myId, myName, myIcon) => {
+  return async (dispatch) => {
+    const timestamp = FirebaseTimestamp.now();
+    const friendData = {
+      uid: friendId,
+      username: username,
+      icon: image,
+      updated_at: timestamp,
+    }
+    const myData = {
+      uid: myId,
+      username: myName,
+      icon: myIcon,
+      updated_at: timestamp,
+    }
+    //自分の友達リストに友達を追加
+    usersRef.doc(myId).collection('friends').doc(friendId).set(friendData)
+      .then(() => {
+        //友達の友達リストに自分を追加
+        usersRef.doc(friendId).collection('friends').doc(myId).set(myData)
+          .then(() => {
+          })
+      })
+  
+  }
+}
 
 export const listenAuthState = () => {
   return async (dispatch) => {
@@ -22,7 +68,8 @@ export const listenAuthState = () => {
                 isSignedIn: true,
                 icon: data.icon,
                 uid: uid,
-                username: data.username
+                username: data.username,
+                friends: data.friends,
               }))
             })
         } else {
@@ -46,6 +93,38 @@ export const resetPassword = (email) => {
           alert('パスワードリセットに失敗しました。通信環境を確認してください。')
         })
     }
+  }
+}
+
+export const sendMessageFriend = (text, friendId, uid, icon) => {
+  return async () => {
+    const timestamp = FirebaseTimestamp.now();
+
+    const message = {
+      uid: uid,
+      sended_at: timestamp,
+      message: text,
+      icon: icon,
+      image: {id: '', path: ''}
+    }
+
+    //自分のデータベースに内容を保存
+    usersRef.doc(uid).collection('friends').doc(friendId)
+    .set({updated_at: timestamp, check: false}, {merge: true})
+    .then(() => {
+      usersRef.doc(uid).collection('friends').doc(friendId).collection('messages').doc().set(message)
+    }).catch((error) => {
+      throw new Error(error)
+    })
+  
+    //相手のデータベースに内容を保存
+    usersRef.doc(friendId).collection('friends').doc(uid)
+      .set({updated_at: timestamp, check: true}, {merge: true})
+      .then(() => {
+        usersRef.doc(friendId).collection('friends').doc(uid).collection('messages').doc().set(message)
+      }).catch((error) => {
+        throw new Error(error)
+      })
   }
 }
 
@@ -102,7 +181,8 @@ export const signIn = (email, password) => {
               icon: data.icon,
               isSignedIn: true,
               uid: uid,
-              username: data.username
+              username: data.username,
+              friends: data.friends,
             }))
 
             dispatch(push('/'))
@@ -177,27 +257,33 @@ export const TwitterSignIn = () => {
           const username = user.displayName;
           const email = user.email;
           const icon = user.photoURL;
-
-          const userInitialData = {
-            icon: {id: "", path: icon},
-            created_at: timestamp,
-            email: email,
-            uid: uid,
-            updated_at: timestamp,
-            username: username,
-          }
           
-          if (!db.collection('users').doc(uid).get()){
-            db.collection('users').doc(uid).set(userInitialData)
+          if (!usersRef.doc(uid).get()){
+            const userInitialData = {
+              icon: {id: "", path: icon},
+              created_at: timestamp,
+              email: email,
+              uid: uid,
+              updated_at: timestamp,
+              username: username,
+            }
+            usersRef.doc(uid).set(userInitialData)
           }
 
-          dispatch(signInAction({
-            icon: icon,
-            isSignedIn: true,
-            uid: uid,
-            username: username
-          }))
-          dispatch(push('/'))
+          usersRef.doc(uid).get()
+            .then(snapshot => {
+              const data = snapshot.data();
+
+              dispatch(signInAction({
+                icon: data.icon,
+                isSignedIn: true,
+                uid: uid,
+                username: data.username,
+                friends: data.friends
+              }))
+              
+              dispatch(push('/'))
+            })
         }
       })
   }

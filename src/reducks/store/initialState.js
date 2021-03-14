@@ -7,7 +7,8 @@ const initialState = {
     icon: {id: "", path: ""},
     isSignedIn: false,
     uid: "",
-    username: ""
+    username: "",
+    friends: []
   }
 }
 

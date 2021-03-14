@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import List from '@material-ui/core/List';
 import { Chat } from '../components/boards';
 import { MessageArea } from '../components/boards';
 import { db, FirebaseTimestamp, storage } from '../firebase';
 import { makeStyles } from '@material-ui/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { sendMessage } from '../reducks/bulletinBoards/operations';
+import { sendMessageFriend } from '../reducks/users/operations';
 import { getUserIcon, getUserId } from '../reducks/users/selector';
 
 const useStyles = makeStyles({
@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
 })
 
-const BoardDetail = () => {
+const ChatFriend = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
@@ -27,11 +27,9 @@ const BoardDetail = () => {
   const uid = getUserId(selector);
   const timestamp = FirebaseTimestamp.now();
 
-  let boardId = window.location.pathname.split('/board/detail/')[1];
+  let friendId = window.location.pathname.split('/chat/')[1];
 
-  const [title, setTitle] = useState(""),
-        [memo, setMemo] = useState(""),
-        [image, setImage] = useState({id: "", path: ""}),
+  const [image, setImage] = useState({id: "", path: ""}),
         [text, setText] = useState(""),
         [messages, setMessages] = useState([]);
 
@@ -57,7 +55,7 @@ const BoardDetail = () => {
       return
     } else {
       addMessages({message: text, sended_at: timestamp, icon: userIcon, uid: uid, image: {id: '', path: ''}})
-      dispatch(sendMessage(text, boardId, uid, userIcon))
+      dispatch(sendMessageFriend(text, friendId, uid, userIcon))
       setText("")
     }
   }
@@ -72,7 +70,7 @@ const BoardDetail = () => {
     const N = 16;
     const fileName = Array.from(crypto.getRandomValues(new Uint32Array(N))).map((n) => S[n%S.length]).join('');
 
-    const uploadRef = storage.ref('boardsImages').child(fileName);
+    const uploadRef = storage.ref('chatsFriendImages').child(fileName);
     const uploadTask = uploadRef.put(blob);
       uploadTask.then(() => {
         // Handle successful uploads on complete
@@ -88,35 +86,29 @@ const BoardDetail = () => {
       
           addMessages(data)
           
-          db.collection('bulletinBoards').doc(boardId).set({updated_at: timestamp}, {merge: true})
+          //自分のデータベースに内容を保存
+          db.collection('users').doc(uid).collection('friends').doc(friendId)
+            .set({updated_at: timestamp, check: false}, {merge: true})
             .then(() => {
-              db.collection('bulletinBoards').doc(boardId).collection('messages').doc().set(data)
+              db.collection('users').doc(uid).collection('friends').doc(friendId).collection('messages').doc().set(data)
+            })
+          
+          //相手のデータベースに内容を保存
+          db.collection('users').doc(friendId).collection('friends').doc(uid)
+            .set({updated_at: timestamp, check: true}, {merge: true})
+            .then(() => {
+              db.collection('users').doc(friendId).collection('friends').doc(uid).collection('messages').doc().set(data)
             })
         })
       }) 
   }, [addMessages])
-  
-  
 
-  //掲示板作成時のデータ取得
-  useEffect(() => {
-    (async() => {
-      await db.collection('bulletinBoards').doc(boardId).get()
-      .then(snapshot => {
-        const board = snapshot.data();
-        setTitle(board.title)
-        setMemo(board.memo)
-        setImage(board.image)
-      })
-    })();
-  }, [])
-
-  //掲示板のメッセージ取得
+  //過去のメッセージ取得
   useEffect(() => {
     (async() => {
       const list = []
 
-      await db.collection('bulletinBoards').doc(boardId)
+      await db.collection('users').doc(uid).collection('friends').doc(friendId)
       .collection('messages')
       .orderBy('sended_at', 'asc')
       .get()
@@ -141,9 +133,7 @@ const BoardDetail = () => {
   return (
     <section className="c-section-container">
       <div>
-        <h2>{title}</h2>
-        <p>{memo}</p>
-        {image.path !== '' && <img className={classes.image} src={image.path} alt={"掲示板のイメージ画像"}/>}
+        {/* <h2></h2> */}
         <div className="module-spacer--small"/>
       </div>
       <div className="c-box">
@@ -156,7 +146,7 @@ const BoardDetail = () => {
           )}
         </List>
         <div className="module-spacer--small"/>
-        <MessageArea id={boardId} value={text} inputText={inputText} sendMessage={sendMessageFunc}
+        <MessageArea value={text} inputText={inputText} sendMessage={sendMessageFunc}
           uploadImage={uploadImage} inputEmoji={inputEmoji}
         />
       </div>
@@ -164,4 +154,4 @@ const BoardDetail = () => {
   )
 }
 
-export default BoardDetail;
+export default ChatFriend;

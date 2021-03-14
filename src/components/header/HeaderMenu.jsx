@@ -41,7 +41,7 @@ const HeaderMenu = (props) => {
         <GroupIcon />
         <p className={classes.space}>掲示板</p>
       </Button>
-      <Button className={classes.monitor}>
+      <Button className={classes.monitor} onClick={() => dispatch(push('/chat'))} >
         <ChatIcon />
         <p className={classes.space}>チャット</p>
       </Button>

@@ -6,6 +6,17 @@ service cloud.firestore {
       allow create;
       allow update: if request.auth.uid == userId;
       allow delete: if request.auth.uid == userId;
+
+      match /friends/{friendId} {
+        allow read: if request.auth.uid != null;
+        allow write: if request.auth.uid != null;
+
+        match /messages/{messageId} {
+          allow read: if request.auth.uid != null;
+          allow write: if request.auth.uid != null;
+          allow create;
+        }
+      }
     }
 
     match /bulletinBoards/{boardId} {

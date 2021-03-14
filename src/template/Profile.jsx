@@ -4,7 +4,7 @@ import { setProfile } from '../reducks/users/operations';
 import { useDispatch, useSelector } from "react-redux";
 import { ImageArea } from '../components/boards';
 import { db } from '../firebase';
-import { getUserId } from '../reducks/users/selector';
+import { getFriends, getUserId } from '../reducks/users/selector';
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -64,6 +64,8 @@ const Profile = () => {
       }
     })
   }, [])
+
+
 
   return (
     <section>

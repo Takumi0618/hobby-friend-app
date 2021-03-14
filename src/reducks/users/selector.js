@@ -2,6 +2,11 @@ import { createSelector } from 'reselect';
 
 const usersSelector = (state) => state.users;
 
+export const getFriends = createSelector(
+  [usersSelector],
+  state => state.friends
+)
+
 export const getIsSignedIn = createSelector(
   [usersSelector],
   state => state.isSignedIn

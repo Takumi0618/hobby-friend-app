@@ -23,7 +23,7 @@ const ImagePreview = (props) => {
 
   return (
     <div className="p-media">
-      <ClearIcon className={classes.icon}onClick={() => props.delete(props.id)} />
+      <ClearIcon className={classes.icon} onClick={() => props.delete(props.id)} />
       <img className="center" alt="" src={props.path} />
     </div>
   )

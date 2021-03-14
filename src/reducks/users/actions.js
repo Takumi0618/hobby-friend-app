@@ -1,3 +1,13 @@
+export const FETCH_FRIENDS = "FETCH_FRIENDS";
+export const fetchFriendsAction = (friends) => {
+  return {
+    type: "FETCH_FRIENDS",
+    payload: {
+      friends: friends,
+    }
+  }
+}
+
 export const SIGN_IN = "SIGN_IN";
 export const signInAction = (userState) => {
   return {
